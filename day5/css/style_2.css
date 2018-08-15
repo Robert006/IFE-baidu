@@ -1,0 +1,48 @@
+html,
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+main {
+    display: flex;
+}
+
+main h2 {
+    margin: 0px;
+    padding-top: 50px;
+    width: 210px;
+    background: #65a4fa;
+    font-size: 36px;
+    color: #fff;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+main .content {
+    flex: 1;
+    padding-left: 20px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+
+ul li label {
+    margin-right: 10px;
+}
+
+dt {
+    margin-top: 8px;
+}
+
+dd {
+    margin-left: 0px;
+    margin-top: 5px;
+}

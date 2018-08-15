@@ -1,0 +1,79 @@
+html,
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+main h2 {
+    margin: 0px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 26px;
+    padding-left: 30px;
+    color: #fff;
+    letter-spacing: 5px;
+    background: #848484;
+}
+
+.content {
+    overflow: hidden;
+}
+
+.content h3 {
+    position: relative;
+    margin: 0px;
+    float: left;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 18px;
+    text-align: center;
+    background: #d6d6d6;
+}
+
+ul,
+dl {
+    position: relative;
+    margin: 0px;
+    list-style: none;
+    padding-left: 10px;
+    padding-top: 10px;
+    height: 100px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+ul::after,
+dl::after,
+.content h3::after {
+    position: absolute;
+    content: '';
+    height: 0px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border: 1px solid #fff;
+}
+
+ul::after,
+dl::after {
+    border: 1px solid #eee;
+}
+
+ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+
+ul li label {
+    margin-right: 10px;
+}
+
+dl dt,
+dl dd {
+    display: inline-block;
+}
+
+dl dd {
+    margin-left: 10px;
+}
