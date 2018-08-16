@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0px;
+            height: 100%;
+        }
+
+        /* float */
+
+        /* main {
+            height: 100%;
+        }
+
+        .left {
+            float: left;
+            width: 200px;
+            height: 100%;
+            background: lemonchiffon;
+        }
+
+        .right {
+            margin-left: 200px;
+            height: 100%;
+            background: lightcyan;
+        } */
+
+        /* flex */
+
+        main {
+            display: flex;
+            height: 100%;
+        }
+
+        .left {
+            width: 200px;
+            background: lemonchiffon;
+        }
+
+        .right {
+            flex: 1;
+            background: lightcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="left"></div>
+        <div class="right"></div>
+    </main>
+</body>
+
+</html>
