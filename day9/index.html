@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+</head>
+
+<body>
+    <input id="first-number" type="number" value="0" placeholder="第一个数字">
+    <input id="second-number" type="number" value="0" placeholder="第二个数字">
+    <button id="add-btn">加</button>
+    <button id="minus-btn">减</button>
+    <button id="times-btn">乘</button>
+    <button id="divide-btn">除</button>
+    <p id="result">运算结果</p>
+    <script>
+        var btnArr = document.getElementsByTagName('button');
+        for (let i = 0; i < btnArr.length; i++) {
+            btnArr[i].onclick = function (e) {
+                var ctype = e.target.id.split('-')[0];
+                compute(ctype);
+            }
+        }
+
+        function compute(type) {
+            var a = parseFloat(document.getElementById('first-number').value);
+            var b = parseFloat(document.getElementById('second-number').value);
+            var result;
+            if (a !== a || b !== b) {
+                result = '请检查数据类型';
+                console.error(result)
+            } else {
+                switch (type) {
+                    case 'add':
+                        result = a + b;
+                        break;
+                    case 'minus':
+                        result = a - b;
+                        break;
+                    case 'times':
+                        result = a * b;
+                        break;
+                    case 'divide':
+                        if (b == 0) {
+                            result = '被除数不能为0';
+                            console.error(result)
+                        } else {
+                            result = a / b;
+                        }
+                        break;
+                    default:
+                        alert('type required')
+                }
+            }
+            document.getElementById('result').innerHTML = result;
+        }
+    </script>
+</body>
+
+</html>

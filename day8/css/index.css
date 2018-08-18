@@ -532,7 +532,7 @@ body {
 
 .content .scroll-wrap {
     position: absolute;
-    top: 65px;
+    top: 61px;
     left: 0px;
     bottom: 0px;
     width: 420px;
@@ -550,10 +550,19 @@ body {
     text-align: center;
 }
 
+.content aside .item {
+    border-left: 3px solid #fff;
+}
+
 .content .scroll-wrap .item {
     padding: 15px 30px 20px;
     width: 400px;
     box-sizing: border-box;
+}
+
+.content aside .scroll-wrap .item:hover,
+.content aside .scroll-wrap .item.current {
+    border-left: 3px solid #1e95ed;
 }
 
 .content .item .time {
@@ -702,11 +711,12 @@ body {
 }
 
 .content .dialogue .scroll-wrap {
-    width: 104%;
+    width: 200%;
 }
 
 .content .dialogue .scroll-wrap .item {
-    width: 100%;
+    width: 50%;
+    padding-right: 20px;
     padding-bottom: 10px;
 }
 
@@ -789,7 +799,8 @@ body {
 
 .dialogue .scroll-wrap .line span {
     position: relative;
-    left: 50%;
+    left: 25%;
+    display: inline-block;
     transform: translateX(-50%);
     top: 5px;
     padding: 0 16px;

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table thead th {
+            padding: 5px;
+        }
+
+        table td {
+            padding: 5px 8px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="dec-number" type="number" placeholder="输入一个十进制非负整数">
+    <input id="bin-bit" type="number" placeholder="输入转化后二进制数字位数">
+    <button id="trans-btn">转化为二进制</button>
+    <p id="result">运算结果</p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th colspan="9">九九乘法表</th>
+            </tr>
+        </thead>
+        <tbody id="table"></tbody>
+    </table>
+    <script>
+        function dec2bin(decNumber) {
+            // 在这里实现你的转化方法，注意需要判断输入必须为一个非负整数
+            var num = decNumber;
+            var arr = [];
+            var res;
+            var digit;
+            var comp;
+            if (num < 0) {
+                console.log('输入错误');
+                return false;
+            } else {
+                while (num / 2 > 0) {
+                    arr.push(num % 2);
+                    num = parseInt(num / 2);
+                }
+                res = arr.reverse().join('');
+                digit = parseInt(document.getElementById('bin-bit').value);
+                if (res.length > digit) {
+                    console.error('bit error')
+                } else {
+                    res = new Array(digit - res.length + 1).join('0').concat(res);
+                }
+            }
+            document.getElementById('result').innerHTML = res;
+        }
+
+        // 实现党点击转化按钮时，将输入的十进制数字转化为二进制，并显示在result的p标签内
+        document.getElementById('trans-btn').onclick = function () {
+            var num = parseInt(document.getElementById('dec-number').value);
+            dec2bin(num);
+        }
+
+        //3的小游戏
+        function print3() {
+            for (let i = 1; i <= 100; i++) {
+                if (i % 3 == 0) {
+                    console.log('PA');
+                } else {
+                    console.log(i)
+                }
+            }
+        }
+        // print3()
+        function multiTable(id) {
+            var table = document.getElementById(id);
+            var res = '';
+            for (var i = 1; i <= 9; i++) {
+                res += '<tr>';
+                for (var j = 1; j <= 9; j++) {
+                    res = res + '<td>' + i + '*' + j + '=' + (i * j) + '</td>';
+                }
+                res += '</tr>';
+            }
+            table.innerHTML = res;
+        }
+        multiTable('table')
+    </script>
+</body>
+
+</html>
