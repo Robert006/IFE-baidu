@@ -31,7 +31,9 @@
                 <h1 id="greeting">ROBERT </h1>
                 <p class="mottos mb-sm">NOTHING SEEK,NOTHING GAIN</p>
                 <dl>
-                    <dt>ABOUT 关于我</dt>
+                    <dt>ABOUT 关于我
+                        <small id="more">more</small>
+                    </dt>
                     <dd>基本信息：王小小 /男</dd>
                     <dd>毕业院校: xx科技大学</dd>
                     <dd>工作年限: 两年半</dd>
@@ -75,36 +77,7 @@
             </section>
         </main>
     </main>
-    <script>
-        window.addEventListener('scroll', function (evt) {
-            var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-            var sidebar = document.querySelector('aside');
-            var mainbody = document.querySelector('.main');
-            if (scrollTop >= 300) {
-                sidebar.className = 'fixed';
-                mainbody.className = 'main fixed'
-            } else {
-                sidebar.className = '';
-                mainbody.className = 'main'
-            }
-        })
-        window.onload = function () {
-            var h = new Date().getHours();
-            var words = 'GOOD ';
-            if (0 < h <= 10) {
-                words += 'MORNING';
-            } else if (10 < h <= 12) {
-                words += 'NOON';
-            } else if (12 < h <= 18) {
-                words += 'AFTERNOON';
-            } else if (18 < h <= 22) {
-                words += 'EVENING';
-            } else if (22 < h <= 23) {
-                words += 'NIGHT';
-            }
-            document.getElementById('greeting').innerHTML = words;
-        }
-    </script>
+    <script src="js/resume.js"></script>
 </body>
 
 </html>

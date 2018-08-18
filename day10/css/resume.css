@@ -248,6 +248,16 @@
      text-decoration: underline;
  }
 
+ .main #more {
+     font-size: 14px;
+     margin-left: 10px;
+     cursor: pointer;
+ }
+
+ .main #more:hover {
+     text-decoration: underline;
+ }
+
  .main dl {
      padding: 20px 15px;
      border-bottom: 4px solid var(--aside-bg);

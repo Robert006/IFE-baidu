@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        #img {
+            width: 300px;
+            height: 310px;
+            background: url('img/sprite.jpg') 0px -2px no-repeat;
+            overflow: hidden;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="img">
+
+        </div>
+    </div>
+    <script>
+        var img = document.getElementById('img');
+        img.style.backgroundPositionY = '-2px';
+        setInterval(changePos, 100);
+        var back = false;
+
+        function changePos() {
+            var y = parseInt(img.style.backgroundPositionY);
+            if (back) {
+                if (y < -600) {
+                    img.style.backgroundPositionY = y + 300 + 'px';
+                } else {
+                    img.style.backgroundPositionY = y + 300 + 'px';
+                    back = false;
+                }
+            } else {
+                if (y > -4500) {
+                    img.style.backgroundPositionY = y - 300 + 'px';
+                } else {
+                    img.style.backgroundPositionY = y - 300 + 'px';
+                    back = true;
+                }
+            }
+
+        }
+    </script>
+</body>
+
+</html>
