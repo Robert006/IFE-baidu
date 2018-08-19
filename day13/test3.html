@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="queue-input" type="text">
+    <p id="queue-cont">队列内容：apple&lt;-pear</p>
+    <button id="in-btn" onclick="Queue.enqueue()">入队</button>
+    <button id="out-btn" onclick="Queue.dequeue()">出队</button>
+    <button id="font-btn" onclick="Queue.printFirst()">打印队头元素内容</button>
+    <button id="empty-btn" onclick="Queue.isEmpty()">判断队列是否为空</button>
+
+    <hr>
+    <input id="stack-input" type="text">
+    <p id="stack-cont">栈内容：apple&lt;-pear</p>
+    <button id="push-btn" onclick="Stack.push()">进栈</button>
+    <button id="pop-btn" onclick="Stack.pop()">退栈</button>
+    <button id="font-btn" onclick="Stack.peek()">打印栈顶元素内容</button>
+    <button id="empty-btn" onclick="Stack.isEmpty()">判断栈是否为空</button>
+
+    <script>
+        var queue = ["apple", "pear"];
+        var Queue = {
+            result: function (arr) {
+                var res = arr.join('<-')
+                res = '队列内容：' + res;
+                document.getElementById('queue-cont').innerHTML = res;
+            },
+            enqueue: function () {
+                var val = document.getElementById('queue-input').value;
+                if (val) {
+                    queue.push(val);
+                    this.result(queue);
+                } else {
+                    alert('请输入内容')
+                }
+            },
+            dequeue: function () {
+                queue.shift();
+                this.result(queue);
+            },
+            printFirst: function () {
+                console.log(queue[0])
+            },
+            isEmpty: function () {
+                console.log(!queue.length)
+                return !queue.length;
+            }
+        }
+    </script>
+    <script>
+        var stack = ["apple", "pear"];
+        var Stack = {
+            result: function (arr) {
+                var res = arr.join('<-')
+                res = '栈内容：' + res;
+                document.getElementById('stack-cont').innerHTML = res;
+            },
+            push: function () {
+                var val = document.getElementById('stack-input').value;
+                if (val) {
+                    stack.push(val);
+                    this.result(stack);
+                } else {
+                    alert('请输入内容')
+                }
+            },
+            pop: function () {
+                stack.pop();
+                this.result(stack);
+            },
+            peek: function () {
+                console.log(stack[stack.length - 1])
+                return stack[stack.length - 1]
+            },
+            isEmpty: function () {
+                console.log(!stack.length)
+                return !stack.length;
+            }
+        }
+    </script>
+    <script>
+        var tree = {
+            "id": 0,
+            "name": "root",
+            "left": {
+                "id": 1,
+                "name": "Simon",
+                "left": {
+                    "id": 3,
+                    "name": "Carl",
+                    "left": {
+                        "id": 7,
+                        "name": "Lee",
+                        "left": {
+                            "id": 11,
+                            "name": "Fate"
+                        }
+                    },
+                    "right": {
+                        "id": 8,
+                        "name": "Annie",
+                        "left": {
+                            "id": 12,
+                            "name": "Saber"
+                        }
+                    }
+                },
+                "right": {
+                    "id": 4,
+                    "name": "Tony",
+                    "left": {
+                        "id": 9,
+                        "name": "Candy"
+                    }
+                }
+            },
+            "right": {
+                "id": 2,
+                "name": "right",
+                "left": {
+                    "id": 5,
+                    "name": "Carl",
+                },
+                "right": {
+                    "id": 6,
+                    "name": "Carl",
+                    "right": {
+                        "id": 10,
+                        "name": "Kai"
+                    }
+                }
+            }
+        }
+
+        function traversal(tree, obj, val) {
+            if (tree) {
+                if (tree[obj.type] === val) {
+                    obj.res = tree[obj[obj.type]]
+                    return;
+                } else {
+                    traversal(tree.left, obj, val);
+                    traversal(tree.right, obj, val);
+                }
+            }
+        }
+        var obj = {
+            'type': 'name',
+            'name': 'id',
+            'id': 'name'
+        };
+        // 假设id和name均不会重复，根据输入name找到对应的id
+        function findIdByName(name) {
+            obj.type = 'name';
+            traversal(tree, obj, name);
+            console.log(obj.res);
+            return obj.res;
+        }
+        // findIdByName('Candy')
+
+        // 假设id和name均不会重复，根据输入id找到对应的name
+        function findNameById(id) {
+            obj.type = 'id';
+            traversal(tree, obj, id);
+            console.log(obj.res);
+            return obj.res;
+        }
+        // findNameById(7)
+        // 把这个对象中所有的名字以“前序遍历”的方式全部输出到console中
+        function getListWithDLR(obj) {
+            if (obj) {
+                console.log(obj.name);
+                getListWithDLR(obj.left);
+                getListWithDLR(obj.right);
+            }
+        }
+        // getListWithDLR(tree)
+        // 把这个对象中所有的名字以“中序遍历”的方式全部输出到console中
+        function getListWithLDR(obj) {
+            if (obj) {
+                getListWithDLR(obj.left);
+                console.log(obj.name);
+                getListWithDLR(obj.right);
+            }
+        }
+        // console.log('')
+        // 把这个对象中所有的名字以“后序遍历”的方式全部输出到console中
+        function getListWithLRD(obj) {
+            if (obj) {
+                getListWithDLR(obj.left);
+                getListWithDLR(obj.right);
+                console.log(obj.name);
+            }
+        }
+        // getListWithLRD(tree)
+    </script>
+</body>
+
+</html>

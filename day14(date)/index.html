@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 800px;
+            margin: 50px auto;
+            text-align: center;
+            font-size: 0px;
+        }
+
+        .container #time,
+        .container #etime {
+            display: inline-block;
+            width: 50%;
+            font-size: 16px;
+        }
+
+        .container .search-time,
+        .container #result-wrapper {
+            font-size: 16px;
+        }
+
+        select {
+            height: 30px;
+            width: 60px;
+            /* text-align: right; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="time">
+
+        </div>
+        <div id="etime">
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="search-time">
+            <select id="year-select">
+            </select>
+            年
+            <select id="month-select">
+            </select>
+            月
+            <select id="day-select">
+            </select>
+            日
+            <select id="hour-select">
+            </select>
+            时
+            <select id="minite-select">
+            </select>
+            分
+            <select id="second-select">
+            </select>
+            秒
+        </div>
+        <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+    </div>
+
+    <script>
+        function render(dom, start, end) {
+            var str = '';
+            for (let i = start; i <= end; i++) {
+                str = str + '<option value="' + i + '">' + i + "</option>";
+            }
+            dom.innerHTML = str;
+        }
+
+        function renderDay(y, m) {
+            var days30 = [4, 6, 9, 11];
+            var days31 = [1, 3, 5, 7, 8, 10, 12];
+            var year = parseInt(y);
+            var month = parseInt(m);
+            if (days31.indexOf(month) !== -1) {
+                render(day, 1, 31);
+            } else if (days30.indexOf(month) !== -1) {
+                render(day, 1, 30);
+            } else {
+                if (year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)) {
+                    render(day, 1, 29);
+                } else {
+                    render(day, 1, 28);
+                }
+            }
+        }
+
+        var year = document.getElementById('year-select');
+        var month = document.getElementById('month-select');
+        var day = document.getElementById('day-select');
+        var hour = document.getElementById('hour-select');
+        var minite = document.getElementById('minite-select');
+        var second = document.getElementById('second-select');
+
+        render(year, 2000, 2032)
+        render(month, 1, 12)
+        render(day, 1, 31)
+        render(hour, 0, 23)
+        render(minite, 0, 59)
+        render(second, 0, 59)
+        selectChange();
+
+        function selectChange() {
+            year.onchange = function () {
+                var m = month.value;
+                var y = year.value;
+                renderDay(y, m);
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+            month.onchange = function () {
+                var m = month.value;
+                var y = year.value;
+                renderDay(y, m);
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+            day.onchange = function () {
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+            hour.onchange = function () {
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+            minite.onchange = function () {
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+            second.onchange = function () {
+                var res = computeTime(getTimeObj());
+                formatResult(res);
+            }
+        }
+
+        function getValue(dom) {
+            return dom.value;
+        }
+
+        function getTimeObj() {
+            var obj = {};
+            obj.year = getValue(year);
+            obj.month = getValue(month);
+            obj.day = getValue(day);
+            obj.hour = repairWithZero(getValue(hour));
+            obj.minite = repairWithZero(getValue(minite));
+            obj.second = repairWithZero(getValue(second));
+            return obj;
+        }
+
+        function computeTime(obj) {
+            var result = {};
+            var datestr, time, aday;
+            datestr = `${obj.year}-${obj.month}-${obj.day} ${obj.hour}:${obj.minite}:${obj.second}`;
+            time = new Date(datestr).getTime() - new Date().getTime();
+            if (time > 0) {
+                result.future = true;
+            } else {
+                result.future = false;
+            }
+            aday = 1000 * 60 * 60 * 24;
+            time = Math.abs(time);
+            result.day = parseInt(time / aday);
+            result.hour = parseInt((time % aday) / (1000 * 60 * 60));
+            result.minite = parseInt((time % aday) % (1000 * 60 * 60) / (1000 * 60));
+            result.second = parseInt((time % aday) % (1000 * 60 * 60) % (1000 * 60) / 1000);
+            return result;
+        }
+
+        function formatResult(obj) {
+            var selectTime = getTimeObj();
+            var str = '';
+            selectTime.week = new Date(`${selectTime.year}-${selectTime.month}-${selectTime.day}`).getDay();
+            var weeks = ['日', '一', '二', '三', '四', '五', '六'];
+            str =
+                `现在距离 ${selectTime.year}年${selectTime.month}月${selectTime.day}日星期${weeks[selectTime.week]} ${selectTime.hour}:${selectTime.minite}:${selectTime.second}`;
+            var timestr = obj.day + '天' + obj.hour + '小时' + obj.minite + '分' + obj.second + '秒';
+            if (obj.future) {
+                str = str + ' 还有' + timestr;
+            } else {
+                str = str + ' 已经过去' + timestr;
+            }
+            document.getElementById('result-wrapper').innerHTML = str;
+        }
+
+
+        /* 最简单的时钟 */
+
+        function getTime() {
+            var now = new Date();
+            var result = {};
+            result.year = getYear(now);
+            result.month = repairWithZero(getMonth(now));
+            result.day = repairWithZero(getDay(now));
+            result.week = getWeek(now);
+            result.hour = repairWithZero(getHours(now));
+            result.minute = repairWithZero(getMinutes(now));
+            result.second = repairWithZero(getSeconds(now));
+            return result;
+        }
+
+        function formatTimeCh(obj) {
+            var str = '';
+            var weeks = ['日', '一', '二', '三', '四', '五', '六'];
+            str =
+                `${obj.year}年${obj.month}月${obj.day}日星期${weeks[obj.week]} ${obj.hour}:${obj.minute}:${obj.second}`;
+            document.getElementById('time').innerHTML = str;
+        }
+
+        function formatTimeEn(obj) {
+            var str = '';
+            var hourStr;
+            var weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            if (obj.hour > 12) {
+                hourStr = `${obj.hour-12}:${obj.minute}:${obj.second} PM`;
+            } else {
+                hourStr = `${obj.hour}:${obj.minute}:${obj.second} AM`;
+            }
+            str = `${obj.year}-${obj.month}-${obj.day} ${weeks[obj.week]} ${hourStr}`;
+            document.getElementById('etime').innerHTML = str;
+        }
+
+        function formatTime(obj) {
+            formatTimeCh(obj);
+            formatTimeEn(obj)
+        }
+
+        setInterval(function () {
+            formatTime(getTime());
+        }, 1000)
+
+        function repairWithZero(num) {
+            if (num < 0) {
+                return false;
+            } else if (num < 10) {
+                return '0' + num;
+            } else {
+                return num;
+            }
+        }
+
+        function getYear(date) {
+            return date.getFullYear();
+        }
+
+        function getMonth(date) {
+            return date.getMonth() + 1;
+        }
+
+        function getDay(date) {
+            return date.getDate();
+        }
+
+        function getWeek(date) {
+            return date.getDay();
+        }
+
+        function getHours(date) {
+            return date.getHours();
+        }
+
+        function getMinutes(date) {
+            return date.getMinutes();
+        }
+
+        function getSeconds(date) {
+            return date.getSeconds();
+        }
+    </script>
+    <script>
+        function Go() {
+            console.log("Go");
+        }
+
+        function GoSteps(n) {
+            if (arguments.length === 0) {
+                Go();
+            } else if (n > 0) {
+                n = parseInt(+n);
+                while (n--) {
+                    Go();
+                }
+            } else {
+                return false;
+            }
+        }
+
+        // GoSteps(10); // Go 10次
+        // GoSteps(1); // Go 1次
+        // GoSteps(); // Go 1次，认为缺少参数时，默认参数为1
+        // GoSteps(0); // 0次
+        // GoSteps(-1); // 0次
+        // GoSteps(1.4); // Go 1次
+        // GoSteps(1.6); // Go 1次
+        // GoSteps(-1); // 0次
+        // GoSteps(true); // Go 1次
+        // GoSteps(false); // 0次
+        // GoSteps("Test"); // 0次
+        // GoSteps(NaN); // 0次
+        // GoSteps(null); // 0次
+    </script>
+</body>
+
+</html>

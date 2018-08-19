@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <label>String A:
+            <input id="radio-a" type="radio" checked="true" name="str-obj" value="a">
+        </label>
+        <textarea id="str-a"></textarea>
+        <label>String B:
+            <input id="radio-b" type="radio" name="str-obj" value="b">
+        </label>
+        <textarea id="str-b"></textarea>
+        <label>Num A：
+            <input id="num-a" type="number" value="0">
+        </label>
+        <label>Num B：
+            <input id="num-b" type="number" value="1">
+        </label>
+    </div>
+    <div id="btn-group">
+        <button data-type='getLength'>获取当前选中输入的内容长度</button>
+        <button data-type='getThird'>当前选中输入中的第3个字符</button>
+        <button data-type='concat'>把两个输入框的文字连接在一起输出（concat）</button>
+        <button data-type='afind'>输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）</button>
+        <button data-type='bfind'>输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）</button>
+        <button data-type='sliceStr'>使用slice获取选中输入框内容的部分内容，参数为num-a及num-b</button>
+        <button data-type='getRows'>当前选中输入框的行数</button>
+        <button data-type='getSubstr'>使用substr获取选中输入框内容的子字符串，参数为num-a及num-b</button>
+        <button data-type='toUpperCase'>把所选输入框中的内容全部转为大写</button>
+        <button data-type='toLowerCase'>把所选输入框中的内容全部转为小写</button>
+        <button data-type='trim'>把所选输入框中内容的半角空格全部去除</button>
+        <button data-type='replace'>把所选输入框中内容的a全部替换成另外一个输入框中的内容</button>
+    </div>
+    <p id="result"></p>
+    <script>
+        function getCheck() {
+            var arr = document.getElementsByName('str-obj');
+            var tar;
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].checked) {
+                    tar = 'str-' + arr[i].value;
+                }
+            }
+            return document.getElementById(tar);
+        }
+        var btn = document.getElementById('btn-group');
+        btn.onclick = function (e) {
+            e.stopPropagation();
+            var type = e.target.dataset.type;
+            var a = parseInt(document.getElementById('num-a').value);
+            var b = parseInt(document.getElementById('num-b').value);
+            if (type) {
+                var res = app[type](a, b);
+                document.getElementById('result').innerHTML = res;
+            }
+        }
+        var app = {
+            getLength: function () {
+                var val = getCheck().value;
+                return val.length;
+            },
+            getThird: function () {
+                var val = getCheck().value;
+                return val[2];
+            },
+            concat: function () {
+                return document.getElementById('str-a').value.concat(document.getElementById('str-b').value);
+            },
+            afind: function () {
+                var a = document.getElementById('str-a').value;
+                var b = document.getElementById('str-b').value;
+                return a.indexOf(b);
+            },
+            bfind: function () {
+                var a = document.getElementById('str-a').value;
+                var b = document.getElementById('str-b').value;
+                return b.lastIndexOf(a);
+            },
+            sliceStr: function (start, end) {
+                var val = getCheck().value;
+                return val.substr(start, end);
+            },
+            getRows: function () {
+                var tar = getCheck();
+                return tar.rows;
+            },
+            getSubstr: function (start, end) {
+                var val = getCheck().value;
+                return val.substr(start, end);
+            },
+            toUpperCase: function () {
+                var val = getCheck().value;
+                return val.toUpperCase();
+            },
+            toLowerCase: function () {
+                var val = getCheck().value;
+                return val.toLowerCase();
+            },
+            trim: function () {
+                var val = getCheck().value;
+                var str = val.split(' ').join('');
+                return str;
+            },
+            replace: function () {
+                var val = getCheck();
+                var sid = val.id.split('-')[1];
+                var tstr = 'str-' + sid;
+                var obj = {
+                    'a': 'str-b',
+                    'b': 'str-a'
+                };
+                document.getElementById(tstr).value = document.getElementById(obj[sid]).value;
+                return document.getElementById(tstr).value;
+            }
+        }
+    </script>
+    <script>
+        /* 
+         * 实现一个字符串头尾去除空格的函数
+         * 注意需要去除的空格， 包括全角、 半角空格
+         * 暂时不需要学习和使用正则表达式的方式
+         */
+
+        function diyTrim(str) {
+            var result = "";
+            var flag = true;
+            var start, end;
+            for (let i = 0; i < str.length; i++) {
+                if (str[i] !== ' ' && (str[i] !== '　')) {
+                    if (flag) {
+                        start = i;
+                        end = i;
+                        flag = false;
+                    } else {
+                        end = i;
+                    }
+                }
+            }
+            result = str.slice(start, end + 1);
+            return result
+        }
+
+        // 测试用例
+        console.log(diyTrim(' a f b    ')); // ->a f b
+        console.log(diyTrim('    ffdaf    ')); // ->ffdaf
+        console.log(diyTrim('1    ')); // ->1
+        console.log(diyTrim('　　f')); // ->f
+        console.log(diyTrim('  　  a f b 　　 ')); // ->a f b
+        console.log(diyTrim(' ')); // ->
+        console.log(diyTrim('　')); // ->
+        console.log(diyTrim('')); // ->
+
+        /*
+        去掉字符串str中，连续重复的地方
+        */
+        function removeRepetition(str) {
+            var result = "";
+            if (str.length < 1) {
+                return result;
+            }
+            var flag = str[0];
+            result = flag;
+            for (let i = 1; i < str.length; i++) {
+                if (flag === str[i]) {
+                    continue;
+                } else {
+                    flag = str[i];
+                    result += flag;
+                }
+            }
+            return result;
+        }
+
+        // 测试用例
+        console.log(removeRepetition("aaa")); // ->a
+        console.log(removeRepetition("abbba")); // ->aba
+        console.log(removeRepetition("aabbaabb")); // ->abab
+        console.log(removeRepetition("")); // ->
+        console.log(removeRepetition("abc")); // ->abc
+    </script>
+</body>
+
+</html>
