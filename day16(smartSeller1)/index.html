@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 880px;
+            margin: 20px auto;
+        }
+
+        .filter {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        /* .filter .filter-item {
+            display: inline-block;
+            width: 280px;
+        } */
+
+        .filter .filter-item {
+            margin-bottom: 10px;
+        }
+
+        .filter .filter-item label {
+            margin-left: 5px;
+        }
+
+        select {
+            width: 100px;
+            height: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table thead th,
+        table td {
+            padding: 5px 14px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        table thead th:first-child {
+            width: 86px;
+            background: lightcyan;
+        }
+
+
+        table tr td.rows {
+            background: lightcyan;
+        }
+
+        table thead th:nth-child(2) {
+            width: 72px;
+        }
+
+        table td {
+            text-align: right;
+        }
+
+        table tr td:first-child,
+        table tr td:nth-child(2) {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="filter">
+            <div id="region-select" data-type="region" class="filter-item">
+            </div>
+            <div id="product-select" data-type="product" class="filter-item">
+            </div>
+        </div>
+        <div id="table-wrapper">
+        </div>
+    </div>
+    <script src="js/ife31data.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/checkbox.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

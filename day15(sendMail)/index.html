@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrapper {
+            width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .wrapper input {
+            width: 300px;
+            height: 36px;
+            padding-left: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .wrapper .email-sug {
+            list-style: none;
+            position: absolute;
+            top: 35px;
+            margin: 0px;
+            padding: 0px;
+            width: 298px;
+            display: none;
+            border: 1px solid #ddd;
+        }
+
+        .wrapper .email-sug li {
+            height: 32px;
+            line-height: 32px;
+            font-size: 16px;
+            padding-left: 6px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .wrapper .email-sug li.active {
+            background: lightcyan;
+        }
+
+        .wrapper .email-sug li:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text" autofocus>
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+    <script>
+        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+        var input = document.getElementById('email-input');
+        var sugWrap = document.getElementById('email-sug-wrapper');
+        var nowSelectTipIndex = 0
+        input.oninput = function () {
+            // console.log('hi')
+            appendTips();
+            toggleDisplay();
+        }
+        input.onkeydown = function (e) {
+            // console.log(e.keyCode)
+            var len = postfixList.length;
+            if (e.keyCode === 38) { //向上
+                if (nowSelectTipIndex < 1) {
+                    nowSelectTipIndex = len - 1;
+                } else {
+                    nowSelectTipIndex--;
+                }
+                appendTips();
+            } else if (e.keyCode === 40) { //向下
+                if (nowSelectTipIndex < len - 1) {
+                    nowSelectTipIndex++;
+                } else {
+                    resetTipIndex();
+                }
+                appendTips();
+            } else if (e.keyCode == 13) { //enter键
+                var val = sugWrap.getElementsByTagName('li')[nowSelectTipIndex].innerHTML;
+                input.value = htmlEncode(val);
+                tipsHide();
+                resetTipIndex();
+            } else if (e.keyCode == 27) { //Esc键
+                input.select();
+            }
+        }
+
+        function resetTipIndex() {
+            nowSelectTipIndex = 0;
+        }
+
+        sugWrap.onclick = function (e) {
+            e.stopPropagation();
+            var val = e.target.textContent;
+            input.value = htmlEncode(val);
+            input.focus();
+            tipsHide();
+        }
+
+        function htmlEncode(html) {
+            var temp = document.createElement('div');
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        }
+
+        function getInputVal() {
+            var val = input.value;
+            var result = '';
+            for (let i = 0; i < val.length; i++) {
+                if (val[i] !== ' ' && (val[i] !== '　')) {
+                    result += val[i];
+                }
+            }
+            return result;
+        }
+
+        function tipsContent() {
+            var rawVal = htmlEncode(getInputVal()); //转义
+            var domStr = '';
+            var textVal;
+            var idx = rawVal.indexOf('@');
+            var endmatch;
+            var tipList = postfixList.slice();
+            if (idx !== -1) {
+                textVal = rawVal.slice(0, idx);
+                endmatch = rawVal.slice(idx + 1);
+                for (let i = 0; i < tipList.length; i++) {
+                    if (tipList[i].indexOf(endmatch) !== -1) {
+                        tipList = tipList.filter((item) => {
+                            return item.indexOf(endmatch) === 0;
+                        })
+                        break;
+                    }
+                }
+            } else {
+                textVal = rawVal;
+            }
+            for (let i = 0; i < tipList.length; i++) {
+                var liStyle;
+                if (i == nowSelectTipIndex) {
+                    liStyle = '<li class="active">';
+                } else {
+                    liStyle = '<li>';
+                }
+                domStr = domStr + liStyle + textVal + '@' + tipList[i] + '</li>';
+            }
+            return domStr;
+        }
+
+        function appendTips() {
+            var tips = tipsContent();
+            sugWrap.innerHTML = tips;
+        }
+
+        function toggleDisplay() {
+            var inputVal = getInputVal();
+            if (inputVal) {
+                tipsShow();
+            } else {
+                tipsHide();
+            }
+        }
+
+        function tipsShow() {
+            sugWrap.style.display = 'block';
+        }
+
+        function tipsHide() {
+            sugWrap.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
