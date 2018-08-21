@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 800px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="line" height="100" width="100">
+            您的浏览器不支持canvas
+        </canvas>
+        <canvas id="rect" height="100" width="100">
+        </canvas>
+        <canvas id="circle" height="100" width="100">
+        </canvas>
+        <canvas id="text" height="100" width="100">
+        </canvas>
+        <canvas id="clock" height="200" width="200">
+        </canvas>
+        <canvas id="cloud" height="200" width="200">
+        </canvas>
+    </div>
+    <script>
+        // 一条线
+        var line = document.getElementById('line');
+        var drawLine = line.getContext('2d');
+        drawLine.beginPath();
+        drawLine.moveTo(30, 30);
+        drawLine.lineTo(70, 70);
+        drawLine.stroke();
+        // 矩形
+        var rect = document.getElementById('rect');
+        var drawRect = rect.getContext('2d');
+        drawRect.strokeRect(25, 25, 50, 50);
+        // 圆形
+        var circle = document.getElementById('circle');
+        var drawCircle = circle.getContext('2d');
+        drawCircle.arc(50, 50, 30, 0, Math.PI * 2, true);
+        drawCircle.stroke();
+        // 文本
+        var text = document.getElementById('text');
+        var drawText = text.getContext('2d');
+        drawText.font = '16px serif';
+        drawText.fillText('Hello World', 10, 50);
+        // 时钟
+        var clock = document.getElementById('clock');
+        var drawClock = clock.getContext('2d');
+        drawClock.arc(100, 100, 70, 0, Math.PI * 2, true);
+        drawClock.stroke();
+
+        drawClock.moveTo(100, 100);
+        drawClock.arc(100, 100, 2, 0, Math.PI * 2, true);
+        drawClock.stroke();
+
+        var hours = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
+        hours.forEach((item, idx) => {
+            var rad = Math.PI / 6 * (idx + 1);
+            var x = 100 + Math.cos(rad) * (70 - 16);
+            var y = 100 + Math.sin(rad) * (70 - 16);
+            drawClock.font = '14px';
+            drawClock.textAlign = 'center';
+            drawClock.textBaseline = "middle";
+            drawClock.fillText(item, x, y)
+        })
+        // 时针、分针
+        drawClock.beginPath();
+        drawClock.moveTo(100, 100);
+        // drawClock.rotate(Math.PI / 3);
+        var endX = 100 - Math.sin(Math.PI / 3) * 26;
+        var endY = 100 + Math.cos(Math.PI / 3) * 26;
+        drawClock.lineTo(endX, endY);
+        drawClock.lineWidth = 3;
+        drawClock.lineCap = "round";
+        drawClock.stroke();
+        drawClock.moveTo(100, 100);
+        drawClock.lineTo(100, 60);
+        drawClock.lineWidth = 2;
+        drawClock.lineCap = "round";
+        drawClock.stroke();
+    </script>
+</body>
+
+</html>

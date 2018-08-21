@@ -61,7 +61,8 @@
         var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
         var input = document.getElementById('email-input');
         var sugWrap = document.getElementById('email-sug-wrapper');
-        var nowSelectTipIndex = 0
+        var nowSelectTipIndex = 0;
+        var tipList = [];
         input.oninput = function () {
             // console.log('hi')
             appendTips();
@@ -69,7 +70,7 @@
         }
         input.onkeydown = function (e) {
             // console.log(e.keyCode)
-            var len = postfixList.length;
+            var len = tipList.length;
             if (e.keyCode === 38) { //向上
                 if (nowSelectTipIndex < 1) {
                     nowSelectTipIndex = len - 1;
@@ -131,7 +132,7 @@
             var textVal;
             var idx = rawVal.indexOf('@');
             var endmatch;
-            var tipList = postfixList.slice();
+            tipList = postfixList.slice();
             if (idx !== -1) {
                 textVal = rawVal.slice(0, idx);
                 endmatch = rawVal.slice(idx + 1);

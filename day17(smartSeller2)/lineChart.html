@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="line" height="360" width="660">
+
+        </canvas>
+    </div>
+    <script src="js/ife31data.js"></script>
+    <script src="js/line.js"></script>
+    <script>
+        var data = sourceData[0];
+        var line = document.getElementById('line');
+        var ctx = line.getContext('2d');
+
+        drawAxis(ctx);
+        drawLine(data);
+    </script>
+</body>
+
+</html>

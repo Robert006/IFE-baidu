@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 980px;
+            margin: 26px auto;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table thead th,
+        table td {
+            padding: 4px 10px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+        }
+
+        table thead tr th {
+            padding: 10px 15px;
+        }
+
+
+        table td {
+            text-align: center;
+            position: relative;
+            width: 65px;
+            height: 33px;
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        table thead th:first-child {
+            width: 78px;
+        }
+
+        table thead th:nth-child(2) {
+            width: 60px;
+        }
+
+
+        table td input {
+            height: 24px;
+            width: 44px;
+            padding-left: 4px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+        }
+
+        table td i {
+            position: absolute;
+            width: 30px;
+            height: 24px;
+            right: -16px;
+            color: #fff;
+            font-style: normal;
+            font-size: 12px;
+            line-height: 20px;
+            background: #4395FF;
+            box-sizing: border-box;
+            border: 1px solid #4395FF;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        table td i:last-child {
+            right: -46px;
+            background: #666;
+            border-color: #666;
+        }
+
+        table tr td:first-child,
+        table tr td:nth-child(2) {
+            text-align: center;
+        }
+
+        .operation {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .operation button {
+            height: 36px;
+            width: 70px;
+            color: #fff;
+            border-radius: 3px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            border: 1px solid #4395FF;
+            background: #4395FF;
+            cursor: pointer;
+        }
+
+        .edit.icon {
+            display: none;
+            color: #000;
+            position: absolute;
+            top: 5px;
+            right: 2px;
+            margin-left: 4px;
+            margin-top: 7px;
+            width: 12px;
+            height: 2px;
+            border-radius: 1px;
+            border: solid 1px #666;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .edit.icon::before {
+            content: '';
+            position: absolute;
+            left: -11px;
+            top: -1px;
+            width: 0px;
+            height: 0px;
+            border-left: solid 5px transparent;
+            border-right: solid 5px currentColor;
+            border-top: solid 2px transparent;
+            border-bottom: solid 2px transparent;
+        }
+
+        table tr td:hover .icon {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="filter">
+            <div id="region-select" data-type="region" class="filter-item">
+            </div>
+            <div id="product-select" data-type="product" class="filter-item">
+            </div>
+        </div>
+        <div id="table-wrapper">
+        </div>
+        <div class="operation">
+            <button type="button" id="save">保存</button>
+        </div>
+    </div>
+
+    <script src="js/ife31data.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
