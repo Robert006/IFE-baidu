@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // ES6
+
+        // 餐厅类 params={cash:number,seats:number,staff:array} 
+        class Restaurant {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+            hire(sb) {
+                this.staff.push(sb);
+            }
+            fire(sb) {
+                var idx = this.staff.indexOf(sb);
+                this.staff.splice(idx, 1);
+            }
+        }
+
+        // 职员类 params={id:number,name:string,salary:number}
+        class Worker {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+            dotask() {
+                console.log('hahaha')
+            }
+        }
+
+        var SingletonCooker = (function () {
+            var instance = null;
+            // 厨师类 stuff={id:number,name:string,salary:number}
+            class Cooker extends Worker {
+                constructor(params) {
+                    super(params);
+                }
+                dotask(dish) {
+                    for (var i = 0; i < dish.length; i++) {
+                        console.log('厨师:菜已做好' + dish[0].name);
+                        waiter.dotask(dish[0])
+                    }
+                    // return dish;
+                }
+            }
+            return {
+                name: 'cooker',
+                getInstance: function (params) {
+                    if (!instance) {
+                        instance = new Cooker(params);
+                    }
+                    return instance;
+                }
+            }
+        })();
+
+        var SingletonWaiter = (function () {
+            var instance = null;
+            class Waiter extends Worker {
+                // 服务员类 params={id:number,name:string,salary:number}
+                constructor(params) {
+                    super(params);
+                    this.menu = [];
+                }
+                dotask(params) {
+                    if (Array.isArray(params)) {
+                        this.menu = params;
+                        console.log('服务员:拿到菜单' + params[0].name);
+                        cooker.dotask(params);
+                    } else {
+                        console.log('服务员:上菜' + params.name);
+                    }
+                }
+
+            }
+            return {
+                name: 'Waiter',
+                getInstance: function (params) {
+                    if (!instance) {
+                        instance = new Waiter(params);
+                    }
+                    return instance;
+                }
+            }
+        })();
+
+        // 顾客类
+        class Customer {
+            constructor(name) {
+                this.name = name;
+            }
+            order() {
+                var menu = [];
+                var idx = Math.floor(Math.random() * (dishMenu.length));
+                menu.push(dishMenu[idx]);
+                console.log(this.name + ':点菜完毕' + menu[0].name);
+                waiter.dotask(menu);
+            }
+            eat(dish) {
+                console.log("顾客:已吃完" + dish.name);
+            }
+        }
+
+        function CustomerQueue() {
+            var arr = [];
+            this.enqueue = function (person) {
+                arr.push(person)
+            }
+            this.dequeue = function () {
+                arr.shift();
+            }
+            this.size = function () {
+                return arr.length;
+            }
+            this.front = function () {
+                return arr[0];
+            }
+            this.isEmpty = function () {
+                return arr.length == 0;
+            }
+        }
+
+        // 菜品类  stuff={name:string,price:number}
+        class Dish {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+        }
+
+        // 实例三个菜品
+        var fish = new Dish({
+            name: 'Steamed Fish',
+            price: 50,
+        });
+        var beef = new Dish({
+            name: 'Beefsteak',
+            price: 70,
+        });
+        var spinach = new Dish({
+            name: 'Spinach',
+            price: 20,
+        })
+        var dishMenu = []; //菜单
+
+        dishMenu.push(fish);
+        dishMenu.push(beef);
+        dishMenu.push(spinach);
+
+        //单例服务员
+        var waiter = SingletonWaiter.getInstance({
+            id: 233,
+            name: 'waiter',
+            salary: 3000
+        });
+
+        //单例厨师
+        var cooker = SingletonCooker.getInstance({
+            id: 123,
+            name: 'cooker',
+            salary: 5000
+        });
+
+        //实例三位客户
+        var nick = new Customer('nick');
+        var tino = new Customer('tino');
+        var jane = new Customer('jane');
+
+        //顾客排队
+        var cqueue = new CustomerQueue();
+        cqueue.enqueue(tino);
+        cqueue.enqueue(nick);
+        cqueue.enqueue(jane);
+
+        function startUp() {
+            while (!cqueue.isEmpty()) {
+                var current = cqueue.front();
+                console.log(current.name + ':开始点菜...')
+                current.order();
+                current.eat(waiter.menu[0])
+                cqueue.dequeue();
+            }
+        }
+        startUp();
+    </script>
+</body>
+
+</html>

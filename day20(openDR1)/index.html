@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // ES5
+        // 餐厅类 stuff={cash:number,seats:number,staff:array} 
+        function Restaurant(stuff) {
+            for (var key in stuff) {
+                this[key] = stuff[key];
+            }
+        }
+        Restaurant.prototype.hire = function (sb) {
+            this.staff.push(sb);
+        };
+        Restaurant.prototype.fire = function (sb) {
+            var idx = this.staff.indexOf(sb);
+            this.staff.splice(idx, 1);
+        };
+        // 职员类 stuff={id:number,name:string,salary:number}
+        function Worker(stuff) {
+            for (var key in stuff) {
+                this[key] = stuff[key];
+            }
+        }
+        Worker.prototype.dotask = function () {
+            console.log('hahaha')
+        };
+        // 服务员类 stuff={id:number,name:string,salary:number}
+        function Waiter(stuff) {
+            Worker.call(this, stuff);
+            this.menu = [];
+        }
+        Waiter.prototype = Object.create(Worker.prototype);
+        Waiter.prototype.constructor = Waiter;
+        Waiter.prototype.dotask = function (arr) {
+            if (Array.isArray(arr)) {
+                this.menu = arr;
+            } else {
+                this.serving();
+            }
+        };
+        Waiter.prototype.serving = function () {};
+        // 厨师类 stuff={id:number,name:string,salary:number}
+        function Cooker(stuff) {
+            Worker.call(this, stuff);
+        }
+        Cooker.prototype = Object.create(Worker.prototype);
+        Cooker.prototype.constructor = Cooker;
+        Cooker.prototype.dotask = function (dish) {
+            return dish;
+        }
+        // 顾客类
+        function Customer() {}
+        Customer.prototype.order = function () {};
+        Customer.prototype.eat = function () {};
+
+        // 菜品类  stuff={name:string,cost:number,price:number}
+        function Dish(stuff) {
+            for (var key in stuff) {
+                this[key] = stuff[key];
+            }
+        }
+    </script>
+    <script>
+        // ES6
+
+        // 餐厅类 params={cash:number,seats:number,staff:array} 
+        class Restaurant {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+            hire(sb) {
+                this.staff.push(sb);
+            }
+            fire(sb) {
+                var idx = this.staff.indexOf(sb);
+                this.staff.splice(idx, 1);
+            }
+        }
+
+
+        // 职员类 params={id:number,name:string,salary:number}
+        class Worker {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+            dotask() {
+                console.log('hahaha')
+            }
+        }
+
+
+
+        // 服务员类 params={id:number,name:string,salary:number}
+        class Waiter extends Worker {
+            constructor(params) {
+                super(params);
+                this.menu = [];
+            }
+            dotask(arr) {
+                if (Array.isArray(arr)) {
+                    this.menu = arr;
+                } else {
+                    this.serving();
+                }
+            }
+            serving() {}
+        }
+
+        // 厨师类 stuff={id:number,name:string,salary:number}
+        class Cooker extends Worker {
+            constructor(params) {
+                super(params);
+            }
+            dotask(dish) {
+                return dish;
+            }
+        }
+
+        // 顾客类
+        class Customer {
+            order() {}
+            eat() {}
+        }
+
+        // 菜品类  stuff={name:string,cost:number,price:number}
+        class Dish {
+            constructor(params) {
+                for (var key in params) {
+                    this[key] = params[key];
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
