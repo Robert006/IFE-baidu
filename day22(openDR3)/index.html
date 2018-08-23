@@ -8,12 +8,17 @@
     <title>Document</title>
     <style>
         .container {
-            width: 800px;
+            width: 900px;
             margin: 20px auto;
         }
 
         .iblock {
             display: inline-block;
+        }
+
+        .dinning {
+            position: relative;
+            height: 300px;
         }
 
         ul {
@@ -22,49 +27,169 @@
             margin: 0px;
         }
 
-        .cooker {
-            width: 100px;
-            height: 200px;
+        #cooker {
+            width: 200px;
+            height: 300px;
             float: left;
+            position: relative;
             border: 1px solid pink;
         }
 
-        .waiter {
+        #waiter {
             width: 80px;
             height: 30px;
             line-height: 30px;
             text-align: center;
+            position: relative;
+            left: 10px;
+            transition: left 0.8s;
             border: 1px solid #999;
         }
 
-        .customer {
-            width: 100px;
-            height: 200px;
+        #customer {
+            width: 200px;
+            height: 300px;
             float: right;
+            position: relative;
             border: 1px solid lightgreen;
+        }
+
+        .dishMenu {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+
+        .dishMenu li {
+            width: 120px;
+            line-height: 26px;
+            padding-left: 5px;
+            position: relative;
+            /* text-align: center; */
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dishMenu li span {
+            position: absolute;
+            right: 3px;
+            top: 0px;
+        }
+
+        #waiter.move {
+            left: 400px;
+        }
+
+        .total {
+            clear: both;
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        #cookerState,
+        #customerState {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 10px;
+            font-size: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #cookerState span,
+        #customerState span,
+        #turnover,
+        #customerName {
+            color: red;
+        }
+
+        #customerName,
+        #think {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            width: 100%;
+            text-align: center;
+            transform: translate(-50%, -50%);
+        }
+
+        #think {
+            top: 50%;
+        }
+
+        #cusList {
+            position: absolute;
+            bottom: -2px;
+            right: 202px;
+            width: 100px;
+            text-align: center;
+        }
+
+        #cusList::before {
+            content: '还在排队的吃瓜群众：';
+            position: absolute;
+            left: -80px;
+            font-size: 15px;
+            top: -25px;
+            color: #999;
+        }
+
+        #cusList li {
+            line-height: 28px;
+            border: 1px solid #eee;
+            margin-top: -1px;
+        }
+
+        #cusList li:first-child {
+            display: none;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="cooker iblock">
-            cooker
-            <span class="state"></span>
+        <div class="dinning">
+            <div class="iblock" id="cooker">
+                <ul class="dishMenu iblock" id="cooking">
+                    <li></li>
+                </ul>
+                cooker
+                <span id="cookerState"></span>
+            </div>
+
+            <div class="iblock move" id="waiter">
+                waiter
+            </div>
+            <div class="iblock" id="customer">
+                <ul class="dishMenu iblock" id="eatting">
+                    <li></li>
+                </ul>
+                <span id="think"></span>
+                <b id="customerName"></b>
+                <span id="customerState"></span>
+            </div>
+            <ul class="iblock" id="cusList">
+                <li></li>
+            </ul>
         </div>
-        <ul class="dishMenu iblock">
-            <li></li>
-        </ul>
-        <div class="waiter iblock">
-            waiter
-        </div>
-        <div class="customer iblock">
-            customer
+        <div class="total">
+            餐厅目前现金数量
+            <span id="turnover"></span>
         </div>
     </div>
     <script>
-        // ES6
-
+        // dom 变量
+        var waiterDom = document.getElementById('waiter');
+        var turnoverDom = document.getElementById('turnover');
+        var customerMenuDom = document.getElementById('eatting');
+        var customerState = document.getElementById('customerState');
+        var customerName = document.getElementById('customerName');
+        var cookerMenuDom = document.getElementById('cooking');
+        var cookerState = document.getElementById('cookerState');
+        var thinkDom = document.getElementById('think');
+        var customerList = document.getElementById('cusList');
+        turnoverDom.innerHTML = '0';
         // 餐厅类 params={cash:number,seats:number,staff:array} 
         class Restaurant {
             constructor(params) {
@@ -99,13 +224,49 @@
             class Cooker extends Worker {
                 constructor(params) {
                     super(params);
+                    this.state = 0;
                 }
                 dotask(dish) {
-                    for (var i = 0; i < dish.length; i++) {
-                        console.log('厨师:菜已做好' + dish[0].name);
-                        waiter.dotask(dish[0])
+                    if (!dish.length) {
+                        waiter.moveRight();
+                        this.state = 0;
+                        cookerState.innerHTML = '空闲';
+                        return
                     }
-                    // return dish;
+                    var time = dish[0].time;
+                    var str = '';
+
+                    for (let i = 1; i < dish.length; i++) {
+                        str = str + '<li>' + dish[i].name + '</li>'
+                    }
+                    cookerMenuDom.innerHTML = str;
+
+                    function cooking(resolve, reject) {
+                        var timer = setInterval(function () {
+                            time--;
+                            cooker.state = 1;
+                            var stateStr = '正在做' + dish[0].name + '还剩<span>' + time + 's</span>';
+                            cookerState.innerHTML = stateStr;
+                            if (!time) {
+                                // console.log('厨师:菜已做好' + dish[0].name);
+                                dish[0].state = 2;
+                                var arr = dish.filter((item) => {
+                                    return item.state === 0;
+                                });
+                                var result = {
+                                    left: arr,
+                                    done: dish[0],
+                                }
+                                clearInterval(timer);
+                                resolve(result);
+                            }
+                        }, 1000);
+                    }
+                    new Promise(cooking).then((result) => {
+                        sendCommand.cooker(result.left);
+                        sendCommand.waiter(result.done);
+                    })
+
                 }
             }
             return {
@@ -126,17 +287,38 @@
                 constructor(params) {
                     super(params);
                     this.menu = [];
+                    this.dishState = {
+                        '0': '还未上',
+                        '1': '菜已上',
+                        '2': '正在吃',
+                        '3': '已吃完',
+                    };
                 }
                 dotask(params) {
                     if (Array.isArray(params)) {
                         this.menu = params;
-                        console.log('服务员:拿到菜单' + params[0].name);
-                        cooker.dotask(params);
+                        console.log('服务员:拿到菜单');
+                        waiter.moveLeft();
+                        sendCommand.cooker(params);
                     } else {
-                        console.log('服务员:上菜' + params.name);
+                        // console.info(params)
+                        // console.log('服务员:上菜' + params.name);
+                        waiter.moveRight();
+                        params.state = 1; //菜已上
+                        setTimeout(function () {
+                            if (cooker.state === 1) {
+                                waiter.moveLeft();
+                            }
+                        }, 800)
+                        cqueue.front().eat(params);
                     }
                 }
-
+                moveRight() {
+                    waiterDom.className = 'iblock move';
+                }
+                moveLeft() {
+                    waiterDom.className = 'iblock';
+                }
             }
             return {
                 name: 'Waiter',
@@ -153,16 +335,122 @@
         class Customer {
             constructor(name) {
                 this.name = name;
+                this.eatMenu = [];
             }
             order() {
-                var menu = [];
-                var idx = Math.floor(Math.random() * (dishMenu.length));
-                menu.push(dishMenu[idx]);
-                console.log(this.name + ':点菜完毕' + menu[0].name);
-                waiter.dotask(menu);
+                var thinkTime = 3;
+                var num = this.getRandomNumber(2, 5);
+                // console.log(':开始点菜...')
+                customerName.innerHTML = this.name + ':开始点菜...';
+                customerState.innerHTML = '';
+                customerMenuDom.innerHTML = '';
+                var menu = this.eatMenu;
+
+                function think(resolve, reject) {
+                    for (let i = 0; i < num; i++) {
+                        var idx = Math.floor(Math.random() * (dishMenu.length));
+                        dishMenu[idx].state = 0; //未上
+                        var obj = {};
+                        for (var key in dishMenu[idx]) {
+                            obj[key] = dishMenu[idx][key];
+                        }
+                        menu.push(obj);
+                        // console.info(menu)
+                    }
+
+                    var timer = setInterval(function () {
+                        console.log('想想吃啥呢...' + (thinkTime) + '秒');
+
+                        var think = '想想吃啥呢...' + (--thinkTime) + '秒'
+                        thinkDom.innerHTML = think;
+                        if (!thinkTime) {
+                            thinkDom.innerHTML = '';
+                            clearInterval(timer);
+                            resolve(menu);
+                        }
+                    }, 1000);
+                }
+                new Promise(think).then((result) => {
+                    console.log(':点菜完毕' + JSON.stringify(result));
+                    customerName.innerHTML = cqueue.front().name + ':点菜完毕,坐等上菜';
+                    cqueue.front().updateMenu(result);
+                    sendCommand.waiter(result);
+                })
+
             }
-            eat(dish) {
-                console.log("顾客:已吃完" + dish.name);
+            eat(food) {
+                var time = 3;
+                var menu = waiter.menu;
+                // console.info(menu)
+                customerName.innerHTML = cqueue.front().name + ':OK, 开吃..'
+                var str = '';
+                for (let i = 0; i < menu.length; i++) {
+                    if (menu[i].state == 2) {
+                        return;
+                    }
+                    str = str + '<li>' + menu[i].name + '<span>' + waiter.dishState[menu[i].state] +
+                        '</span></li>';
+                }
+                customerMenuDom.innerHTML = str;
+
+                function eatting(resolve, reject) {
+                    var timer = setInterval(function () {
+                        food.state = 2; //正在吃
+                        var stateStr = '正在努力吃' + food.name + '，用餐结束还剩' + (--time) + 's'
+                        // console.log();
+                        customerState.innerHTML = stateStr;
+                        if (!time) {
+                            clearInterval(timer);
+                            food.state = 3; //吃完
+                            resolve(food);
+                        }
+                    }, 1000)
+                }
+                new Promise(eatting).then((result) => {
+                    var flag = true;
+                    cqueue.front().updateMenu(waiter.menu); //吃完后更新菜单状态
+                    // console.info(waiter.menu);
+                    for (let i = 0; i < menu.length; i++) {
+                        if (menu[i].state !== 3) { //判断是否吃完
+                            flag = false;
+                        }
+                    }
+                    if (flag) {
+                        //结账下一位
+                        console.log('结账啦' + cqueue.front().name)
+                        menu.forEach((item) => {
+                            totalMoney += item.price;
+                        })
+                        customerName.innerHTML = cqueue.front().name + ':结账';
+                        var settle = cqueue.front().name + '结账啦' + '<span>' + totalMoney + '</span>';
+                        customerState.innerHTML = settle;
+                        var nowCurrency = parseInt(turnoverDom.innerHTML) + totalMoney;
+                        turnoverDom.innerHTML = nowCurrency;
+                        if (!cqueue.isEmpty()) {
+                            cqueue.dequeue();
+                            updateCustomer(cqueue.items())
+                            startUp();
+                        }
+                    } else {
+                        var select = menu.filter((item) => {
+                            return item.state == 1;
+                        });
+                        if (select.length) {
+                            cqueue.front().eat(select[0]);
+                        }
+                    }
+                });
+            }
+            getRandomNumber(start, end) {
+                return start + Math.round(Math.random() * (end - start));
+            }
+            updateMenu(menu) {
+                var str = '';
+                for (var i = 0; i < menu.length; i++) {
+                    str = str + '<li>' + menu[i].name + '<span>' + waiter.dishState[menu[i].state] +
+                        '</span></li>';
+                }
+                customerMenuDom.innerHTML = str;
             }
         }
 
@@ -183,6 +471,9 @@
             this.isEmpty = function () {
                 return arr.length == 0;
             }
+            this.items = function () {
+                return arr;
+            }
         }
 
         // 菜品类  stuff={name:string,price:number}
@@ -194,7 +485,7 @@
             }
         }
 
-        // 实例三个菜品
+        // 实例四个菜品
         var fish = new Dish({
             name: 'Steamed Fish',
             time: 5,
@@ -222,6 +513,8 @@
         dishMenu.push(beef);
         dishMenu.push(spinach);
 
+        //餐厅金额
+        var totalMoney = 0;
         //单例服务员
         var waiter = SingletonWaiter.getInstance({
             id: 233,
@@ -236,6 +529,15 @@
             salary: 5000
         });
 
+        var sendCommand = {
+            waiter: function (params) {
+                waiter.dotask(params);
+            },
+            cooker: function (params) {
+                cooker.dotask(params);
+            }
+        }
+
         //实例三位客户
         var nick = new Customer('nick');
         var tino = new Customer('tino');
@@ -247,16 +549,26 @@
         cqueue.enqueue(nick);
         cqueue.enqueue(jane);
 
+        function updateCustomer(list) {
+            var str = '';
+            for (let i = 0; i < list.length; i++) {
+                str = str + '<li>' + list[i].name + '</li>';
+            }
+            customerList.innerHTML = str;
+        }
+
+        updateCustomer(cqueue.items())
+
         function startUp() {
-            while (!cqueue.isEmpty()) {
+            if (!cqueue.isEmpty()) {
                 var current = cqueue.front();
-                console.log(current.name + ':开始点菜...')
+                waiter.moveRight();
                 current.order();
-                current.eat(waiter.menu[0])
-                cqueue.dequeue();
+            } else {
+                console.log('客人都吃好了啦，可以休息一下啦')
             }
         }
-        // startUp();
+        startUp();
     </script>
 </body>
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+
+        .container h3 {
+            position: relative;
+            font-size: 28px;
+            margin-top: 40px;
+            line-height: 30px;
+            margin-bottom: 70px;
+            font-weight: normal;
+            transition: color cubic-bezier(0, 0, 0.68, 1) 0.3s;
+        }
+
+        .container h3::after {
+            content: '';
+            height: 4px;
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            width: 0px;
+            transform: translate(-50%, -50%);
+            border-bottom: 4px solid blue;
+            transition: width cubic-bezier(0, 0, 0.68, 0.8) 0.3s;
+        }
+
+        .container h3.active {
+            color: blue;
+        }
+
+        .container h3.active::after {
+            width: 130px;
+        }
+
+        .container button {
+            padding: 2px 10px;
+            font-size: 24px;
+            background: #fff;
+            border-radius: 8px;
+            outline: none;
+            border: 1px solid #eee;
+            box-shadow: 0px 1px 1px #999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>前端学院</h3>
+        <button type="button" id="btn">切换样式</button>
+    </div>
+
+    <script>
+        document.getElementById('btn').addEventListener('click', function () {
+            toggle();
+        })
+        //切换状态
+        function toggle() {
+            var dom = document.querySelector('.container h3');
+            if (!dom.className) {
+                dom.className = 'active';
+            } else {
+                dom.className = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
