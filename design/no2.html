@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 800px;
+            margin: 30px auto;
+        }
+
+        /* 基本样式 */
+
+        .box0 {
+            display: inline-block;
+            width: 80px;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            background: #f8f6f7;
+            margin-left: 40px;
+            border: 1px solid #eee;
+        }
+
+        /* 向左倾斜30度 */
+
+        .box1 {
+            transform: skewX(30deg);
+        }
+
+        /* X轴压缩2倍 */
+
+        .box2 {
+            transform: scaleX(0.5);
+        }
+
+        /* 旋转45度 */
+
+        .box3 {
+            transform: rotate(30deg);
+        }
+
+        /* X轴位移10px;Y轴位移20px */
+
+        .box4 {
+            transform: translate(10px, 20px);
+        }
+
+        /* 同时包含上述属性 */
+
+        .box5 {
+            transform: skewX(30deg) scaleX(0.5) rotate(30deg) translate(10px, 20px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box0">box0</div>
+        <div class="box0 box1">box1</div>
+        <div class="box0 box2">box2</div>
+        <div class="box0 box3">box3</div>
+        <div class="box0 box4">box4</div>
+        <div class="box0 box5">box5</div>
+    </div>
+</body>
+
+</html>
