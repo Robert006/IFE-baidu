@@ -18,7 +18,7 @@
             width: 250px;
             height: 350px;
             position: relative;
-            transition: transform ease 0.5s;
+            /* transition: transform ease 0.5s; */
         }
 
         .container .img-wrap img {
@@ -27,15 +27,25 @@
             left: 0px;
             width: 250px;
             height: 350px;
-            transition: all ease-out 0.3s;
+            transition: all ease-out 1.5s;
+            backface-visibility: hidden;
         }
 
-        .container .img-wrap:hover img {
-            transform: rotateY(180deg);
+        .container .img-wrap .first {
+            z-index: 2;
+        }
+
+        .container .img-wrap .second {
+            z-index: 1;
+            transform: rotateY(-180deg);
         }
 
         .container .img-wrap:hover .first {
-            opacity: 0;
+            transform: rotateY(180deg);
+        }
+
+        .container .img-wrap:hover .second {
+            transform: rotateY(0deg);
         }
     </style>
 </head>
@@ -43,8 +53,8 @@
 <body>
     <div class="container">
         <div class="img-wrap">
-            <img class="second" src="img/no4/反面.jpg" alt="">
             <img class="first" src="img/no4/正面.jpg" alt="">
+            <img class="second" src="img/no4/反面.jpg" alt="">
         </div>
     </div>
 </body>

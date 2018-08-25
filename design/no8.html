@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .container {
+            width: 800px;
+            margin: 0px auto;
+            background: #222;
+        }
+
+        #banner {
+            padding-top: 30px;
+            background: #102131;
+            height: 300px;
+        }
+
+        #anima {
+            width: 300px;
+            height: 260px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="banner">
+        </div>
+        <div id="anima">
+        </div>
+    </div>
+    <script src="data/lottie.js" type="text/javascript"></script>
+    <script>
+        var banner = document.getElementById('banner');
+        var banima = bodymovin.loadAnimation({
+            container: banner, // Required
+            path: 'data/data.json', // Required
+            renderer: 'svg', // Required
+            autoplay: true, // Optional
+            loop: true,
+            name: "banner", // Name for future reference. Optional.
+        })
+
+        var icon = document.getElementById('anima');
+        var animation = bodymovin.loadAnimation({
+            container: icon, // Required
+            path: 'data/data01.json', // Required
+            renderer: 'svg', // Required
+            autoplay: false, // Optional
+            name: "store", // Name for future reference. Optional.
+        })
+        icon.addEventListener('mouseenter', function () {
+            animation.play();
+        })
+        icon.addEventListener('mouseleave', function () {
+            animation.stop();
+        })
+    </script>
+
+</body>
+
+</html>

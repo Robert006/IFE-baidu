@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0px;
+            margin: 0px;
+            height: 100%;
+        }
+
+        .banner {
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner .imgs {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .banner .slider {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* 大图片01 */
+
+        .banner .slider.no1 {
+            left: -500px;
+            transition: left ease-out 0.5s;
+            z-index: 1;
+        }
+
+        .banner .slider.no1.active {
+            left: 0px;
+        }
+
+        /* 大图片02 */
+
+        .banner .slider.no2 {
+            top: 350px;
+            transition: top ease-out 0.5s;
+        }
+
+        .banner .slider.no2.active {
+            z-index: 1;
+            top: 0px;
+        }
+
+        /* 大图片03 */
+
+        .banner .slider.no3 {
+            transform: scale(0.1);
+            transition: transform ease-in 1s;
+        }
+
+        .banner .slider.no3.active {
+            transform: scale(1);
+        }
+
+        /* 大图片04 */
+
+        .banner .slider.no4 {
+            transform: scale(2);
+            transition: transform ease-out 1s;
+        }
+
+        .banner .slider.no4.active {
+            transform: scale(1);
+        }
+
+        /* 大图片05 */
+
+        .banner .slider.no5 {
+            transform: scale(0.1) rotateZ(-360deg);
+            transition: transform ease-in-out 0.7s;
+        }
+
+        .banner .slider.no5.active {
+            transform: scale(1) rotateZ(0deg);
+        }
+
+        .pointer {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            width: 790px;
+            transform: translateX(-50%);
+            list-style: none;
+            padding: 0px;
+            font-size: 0;
+            z-index: 3;
+        }
+
+        .pointer li {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+            width: 150px;
+            height: 125px;
+            cursor: pointer;
+
+        }
+
+        .pointer li::after {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+            background: #000;
+            opacity: 0.3;
+            transition: opacity ease-in 0.3s;
+        }
+
+        .pointer li:hover::after {
+            opacity: 0;
+        }
+
+        .pointer li:last-child {
+            margin-right: 0px;
+        }
+
+        .pointer li img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <div class="imgs">
+            <img class="slider no1" src="img/no6/banner01.jpg" alt="">
+            <img class="slider no2 active" src="img/no6/banner02.jpg" alt="">
+            <img class="slider no3" src="img/no6/banner03.jpg" alt="">
+            <img class="slider no4" src="img/no6/banner04.jpg" alt="">
+            <img class="slider no5" src="img/no6/banner05.jpg" alt="">
+        </div>
+        <ul class="pointer">
+            <li>
+                <img src="img/no6/banner01.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/no6/banner02.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/no6/banner03.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/no6/banner04.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/no6/banner05.jpg" alt="">
+            </li>
+        </ul>
+    </div>
+    <script>
+        var pointer = document.querySelector('.pointer');
+        var imgs = document.querySelector('.imgs').querySelectorAll('img');
+        var zIdx = 2; /*z-index初始值*/
+        pointer.addEventListener('click', function (e) {
+            e.stopPropagation();
+
+            var item = e.target;
+            var lists = Array.from(pointer.querySelectorAll('li'))
+            var idx = lists.indexOf(item);
+            imgs[idx].style.zIndex = ++zIdx;
+
+            var oldClass = imgs[idx].className;
+            if (oldClass.indexOf('active') == -1) {
+                imgs[idx].className = oldClass + ' active';
+            }
+            // 去除其他img中的active
+            setTimeout(function () {
+                for (var i = 0; i < imgs.length; i++) {
+                    var cls = imgs[i].className;
+                    if (cls.indexOf('active') !== -1 && (i !== idx)) {
+                        console.log(cls)
+                        imgs[i].className = cls.slice(0, cls.indexOf(' active'));
+                    }
+                }
+            }, 1000)
+        })
+    </script>
+</body>
+
+</html>
