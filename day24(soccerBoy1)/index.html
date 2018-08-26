@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 800px;
+            text-align: center;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <svg version="1.1" id="field" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+        </svg>
+    </div>
+    <script>
+        function FieldMaker(option) {
+            var target = option.ele;
+            var width = parseInt(option.ele.parentNode.offsetWidth);
+            var scale = (width / 120).toFixed(2);
+            target.setAttribute('width', width);
+            target.setAttribute('height', scale * 80);
+            console.log(option)
+            var bg = createRect({
+                x: 0,
+                y: 0,
+                width: width,
+                height: scale * 80,
+                color: option.bgcolor,
+            });
+            target.appendChild(bg);
+            target.appendChild(createRect({
+                x: 10 * scale,
+                y: 10 * scale,
+                width: width - 20 * scale,
+                height: 60 * scale,
+            })); //全场
+            target.appendChild(createRect({
+                x: 10 * scale,
+                y: 20 * scale,
+                width: 16 * scale,
+                height: 40 * scale,
+            })); //左罚球区
+            target.appendChild(createRect({
+                x: 10 * scale,
+                y: 31 * scale,
+                width: 6 * scale,
+                height: 18 * scale,
+            })); //左球门区
+            target.appendChild(createRect({
+                x: 8.5 * scale,
+                y: 36 * scale,
+                width: 1.5 * scale,
+                height: 8 * scale,
+            })); //左球门
+            target.appendChild(createRect({
+                x: width - 26 * scale,
+                y: 20 * scale,
+                width: 16 * scale,
+                height: 40 * scale,
+            })); //右罚球区
+            target.appendChild(createRect({
+                x: width - 16 * scale,
+                y: 31 * scale,
+                width: 6 * scale,
+                height: 18 * scale,
+            })); //右球门区
+            target.appendChild(createRect({
+                x: width - 10 * scale,
+                y: 36 * scale,
+                width: 1.5 * scale,
+                height: 8 * scale,
+            })); //右球门
+            target.appendChild(createLine({
+                x: 10 * scale + (width - 20 * scale) / 2,
+                y: 10 * scale,
+            }, {
+                x: 10 * scale + (width - 20 * scale) / 2,
+                y: 70 * scale,
+            }, '#fff')); //中线
+            target.appendChild(createCircle({
+                x: width / 2,
+                y: 40 * scale,
+                r: 10 * scale,
+                fill: 'transparent',
+            })); //中圈
+            target.appendChild(createPath({
+                x: 26 * scale,
+                y: 40 * scale - Math.sin(Math.PI / 6) * 2 * 8 * scale,
+                r: 10 * scale,
+                endX: 26 * scale,
+                endY: 40 * scale + Math.sin(Math.PI / 6) * 2 * 8 * scale,
+            })) //左罚球弧线
+            target.appendChild(createPath({
+                x: 26 * scale,
+                y: 40 * scale - Math.sin(Math.PI / 6) * 2 * 8 * scale,
+                r: 10 * scale,
+                endX: 26 * scale,
+                endY: 40 * scale + Math.sin(Math.PI / 6) * 2 * 8 * scale,
+            })) //左罚球弧线
+        }
+
+        function createRect(param) {
+            var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            var bgcolor = param.color || 'transparent';
+            rect.setAttribute('x', param.x);
+            rect.setAttribute('y', param.y);
+            rect.setAttribute('width', param.width);
+            rect.setAttribute('height', param.height);
+            rect.setAttribute('fill', bgcolor);
+            if (!param.bgcolor) {
+                var lineWidht = param.strokeWidth || 1;
+                var strokeColor = param.stroke || '#fff';
+                rect.setAttribute('stroke', strokeColor);
+                rect.setAttribute('stroke-width', lineWidht);
+            }
+            return rect;
+        }
+
+        function createLine(start, end, color = '#fff') {
+            var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute('x1', start.x);
+            line.setAttribute('x2', end.x);
+            line.setAttribute('y1', start.y);
+            line.setAttribute('y2', end.y);
+            line.setAttribute('stroke', color);
+            line.setAttribute('stroke-width', 1);
+            return line;
+        }
+
+        function createCircle(option) {
+            var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            var color = option.stroke || '#fff';
+            var fill = option.fill || 'transparent';
+            circle.setAttribute('cx', option.x);
+            circle.setAttribute('cy', option.y);
+            circle.setAttribute('r', option.r);
+            circle.setAttribute('fill', fill);
+            circle.setAttribute('stroke', color);
+            circle.setAttribute('stroke-width', 1);
+            return circle;
+        }
+
+        function createPath(option) {
+            var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            var x = option.x;
+            var y = option.y;
+            var r = parseInt(option.r);
+            var des = ['M', x, y, 'A', r, r, 0, 0, 1, option.endX, option.endY];
+            path.setAttribute('x', x);
+            path.setAttribute('y', y);
+            path.setAttribute('d', des.join(' '));
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', '#fff');
+            path.setAttribute('stroke-width', 1);
+            return path;
+        }
+
+        FieldMaker.prototype.draw = function () {
+            return "success done";
+        }
+
+        FieldMaker.factory = function (type, option) {
+            var constr = type,
+                newfield;
+            if (typeof FieldMaker[constr] !== "function") {
+                throw {
+                    name: "Error",
+                    message: constr + "doesn't exist"
+                }
+            } else {
+                if (typeof FieldMaker[constr].prototype.draw !== "function") {
+                    FieldMaker[constr].prototype = new FieldMaker(option);
+                }
+                newfield = new FieldMaker[constr]();
+                return newfield;
+            }
+        }
+
+        FieldMaker.Soccer = function () {
+            this.name = 'soccer';
+        }
+
+        var svgNode = document.getElementById('field');
+        var soccerField = FieldMaker.factory('Soccer', {
+            ele: svgNode,
+            bgcolor: '#008001',
+            linecolor: '#fff',
+        });
+
+        console.log(soccerField)
+    </script>
+</body>
+
+</html>
