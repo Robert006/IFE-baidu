@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0px;
+            margin: 0px;
+            background: lightgray;
+        }
+
+        .container {
+            width: 800px;
+            text-align: center;
+            margin: 0px auto;
+        }
+
+        .container i {
+            color: aliceblue;
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .container button,
+        .container input {
+            line-height: 30px;
+            height: 30px;
+            vertical-align: top;
+            box-sizing: border-box;
+        }
+
+        .container input {
+            padding-left: 5px;
+        }
+
+        .container button {
+            background: skyblue;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .mt-sm {
+            margin-top: 10px;
+        }
+
+        .god-model {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <svg version="1.1" id="field" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+        </svg>
+    </div>
+    <div class="container mt-sm">
+        <input type="text" id="speed" placeholder="速度,不填随机">
+        <input type="text" id="direct" placeholder="角度,不填随机">
+        <button type="button" id="kick"> 踢球</button>
+        <button type="button" id="search"> 找球</button>
+        <div class="god-model">
+            <button type="button" id="shoot">射门</button>
+        </div>
+    </div>
+    <script src="js/utility.js"></script>
+    <script src="js/field.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/soccer.js"></script>
+    <script>
+        /* 创建球场*/
+        var svgNode = document.getElementById('field');
+        var soccerField = FieldMaker.factory('Soccer', {
+            ele: svgNode,
+            bgcolor: '#008001',
+            linecolor: '#fff',
+        });
+        var ChinaTeam; //足球队
+        function init(number = 5) {
+            var width = parseInt(svgNode.parentNode.offsetWidth);
+            var scale = (width / 120).toFixed(2);
+            ChinaTeam = [];
+            var targetTeam = [];
+            var target = {};
+            var player;
+            for (let i = 0; i < number; i++) {
+                player = new Player({
+                    speed: common.getRandom(1, 99)
+                });
+                player.search = null;
+                ChinaTeam.push(player);
+            }
+            for (let j = 0; j < ChinaTeam.length; j++) {
+                target.x = common.getRandom(0, width - 20 * scale);
+                target.y = common.getRandom(0, 58 * scale);
+                ChinaTeam[j].running(target);
+            }
+        }
+        init(1); //初始化队伍人数
+
+        // 足球加速度
+        const ACCEL = -4;
+
+        var soccer = SingleSoccer.getInstance({
+            direction: 30,
+            initSpeed: 20,
+        });
+        soccer.run();
+        console.log(soccer)
+        //找球
+        document.getElementById('search').addEventListener('click', function () {
+            if (ChinaTeam.length) {
+                ChinaTeam[0].running(soccer.getPos())
+                ChinaTeam[0].search = setInterval(function () {
+                    // console.log(ChinaTeam[0].finded.soccer)
+                    if (ChinaTeam[0].finded.soccer) {
+                        clearInterval(ChinaTeam[0].search)
+                    } else {
+                        ChinaTeam[0].running(soccer.getPos())
+                    }
+                }, 5000)
+            }
+        });
+        //踢球
+        document.getElementById('kick').addEventListener('click', function () {
+            var speed = document.getElementById('speed').value || common.getRandom(1, 50);
+            var direct = document.getElementById('direct').value || common.getRandom(0, 360);
+            if (isNaN(speed) || isNaN(direct)) {
+                alert('咱技术不好，也不能瞎踢啊');
+                return false;
+            }
+            soccer.initSpeed = speed;
+            soccer.direction = direct;
+            // console.log(soccer)
+            if (!ChinaTeam[0].finded.soccer) {
+                alert('找完球再踢');
+                return false;
+            } else {
+                console.log('直接踢')
+                soccer.run();
+            }
+            ChinaTeam[0].finded.soccer = false;
+        });
+        //射门
+        document.getElementById('shoot').addEventListener('click', function () {
+            if (!ChinaTeam[0].finded.soccer) {
+                alert('找完球再踢');
+                return false;
+            } else {
+                soccer.goals();
+                ChinaTeam[0].finded.soccer = false;
+            }
+        })
+    </script>
+</body>
+
+</html>

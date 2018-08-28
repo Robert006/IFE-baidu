@@ -20,15 +20,17 @@
       this.velocity = vNum; //球员速度值
       this.explosive = common.getRandom(1, 99); //爆发力
       this.physical = common.getRandom(1, 99); //体力
+      this.skill = option.skill || common.getRandom(1, 99); //技术值
+      this.power = option.power || common.getRandom(1, 99); //力量值
       this.speedUp = (-3 / 98) * this.explosive + (4 * 99 - 1) / 98; //达到最高速所需时间
       this.insist = (990 - 15) / 98 + (this.physical - 1) * (5 / 98); //最高速坚持时间
       this.pos = {
           x: rx - 10 * scale,
           y: ry - 10 * scale,
       }; //球员位置
-
+      this.finded = {}; //找到球
       this.timer = null; //球员运动定时器
-      this.run = function (target) {
+      this.running = function (target) {
           var start = this.pos;
           var end = {
               x: 10 * scale + target.x,
@@ -50,34 +52,64 @@
           point.style.top = speedPoint.y + 'px';
           point.style.left = speedPoint.x + 'px';
           //保持最大速度
-          console.log('insist', this.insist)
+          //   console.log('insist', this.insist)
           var highway = this.insist * vMax; //最大速度运动的距离
           // 在最大速度运动距离到达终点
-          console.log('hightway', highway)
+          //   console.log('hightway', highway)
           this.timer = setTimeout(maxSpeed, this.speedUp * 1000)
+          var get = this.finded;
 
           function maxSpeed() {
               var remain = Math.sqrt(Math.pow(speedPoint.x - end.x, 2) + Math.pow(speedPoint.y - end.y, 2));
               var hx, hy, htime;
               // console.log('remain', remain)
               if (highway > remain) {
-                  hx = Math.abs(remain * Math.sin(angle / 180 * (Math.PI)));
-                  hy = Math.abs(remain * Math.cos(angle / 180 * (Math.PI)));
-                  htime = remain / vMax;
-                  maxPoint = end;
-                  point.style.transition = 'all ' + htime + 's liner';
-                  point.style.top = end.y + 'px';
-                  point.style.left = end.x + 'px';
-                  setTimeout(downSpeed, htime * 1000)
+                  function runAndStop(resolve, reject) {
+                      hx = Math.abs((remain - 2 * scale) * Math.sin(angle / 180 * (Math.PI)));
+                      hy = Math.abs((remain - 2 * scale) * Math.cos(angle / 180 * (Math.PI)));
+                      htime = remain / vMax;
+                      maxPoint = end;
+                      point.style.transition = 'all ' + htime + 's liner';
+                      point.style.top = end.y - 2 * scale * Math.cos(angle / 180 * (Math.PI)) + 'px';
+                      point.style.left = end.x - 2 * scale * Math.sin(angle / 180 * (Math.PI)) + 'px';
+                      resolve();
+                  }
+                  var p = new Promise(runAndStop).then(() => {
+                      point.style.transition = 'all ' + 1 + 's ease-out';
+                      point.style.top = end.y + 'px';
+                      point.style.left = end.x + 'px';
+                      //重置球员位置
+                      start.x = end.x;
+                      start.y = end.y;
+                      if (target.type || target.type == 'soccer') {
+                          get.soccer = true;
+                      }
+                  })
+
+                  // this.timer = setTimeout(downSpeed, htime * 1000)
               } else {
-                  hx = Math.abs(highway * Math.sin(angle / 180 * (Math.PI)));
-                  hy = Math.abs(highway * Math.cos(angle / 180 * (Math.PI)));
-                  htime = highway / vMax;
-                  maxPoint.x = speedPoint.x > end.x ? (speedPoint.x - hx) : (speedPoint.x + hx);
-                  maxPoint.y = speedPoint.y > end.y ? (speedPoint.y - hy) : (speedPoint.y + hy);
-                  point.style.transition = 'all ' + htime + 's liner';
-                  point.style.top = 10 * scale + maxPoint.y + 'px';
-                  point.style.left = 10 * scale + maxPoint.x + 'px';
+                  function tiredAndDown(resolve, reject) {
+                      hx = Math.abs(highway * Math.sin(angle / 180 * (Math.PI)));
+                      hy = Math.abs(highway * Math.cos(angle / 180 * (Math.PI)));
+                      htime = highway / vMax;
+                      maxPoint.x = speedPoint.x > end.x ? (speedPoint.x - hx) : (speedPoint.x + hx);
+                      maxPoint.y = speedPoint.y > end.y ? (speedPoint.y - hy) : (speedPoint.y + hy);
+                      point.style.transition = 'all ' + htime + 's liner';
+                      point.style.top = 10 * scale + maxPoint.y + 'px';
+                      point.style.left = 10 * scale + maxPoint.x + 'px';
+                      resolve();
+                  }
+                  new Promise(tiredAndDown).then(() => {
+                      point.style.transition = 'all ' + 3 + 's ease-out';
+                      point.style.top = end.y + 'px';
+                      point.style.left = end.x + 'px';
+                      //重置球员位置
+                      start.x = end.x;
+                      start.y = end.y;
+                      if (target.type || target.type == 'soccer') {
+                          get.soccer = true;
+                      }
+                  })
               }
           }
 
