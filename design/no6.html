@@ -41,58 +41,88 @@
         /* 大图片01 */
 
         .banner .slider.no1 {
-            left: -500px;
-            transition: left ease-out 0.5s;
             z-index: 1;
         }
 
         .banner .slider.no1.active {
-            left: 0px;
+            animation: anim01 0.5s ease-out 0s;
+        }
+
+        @keyframes anim01 {
+            from {
+                left: -500px;
+            }
+
+            to {
+                left: 0px;
+            }
         }
 
         /* 大图片02 */
 
         .banner .slider.no2 {
-            top: 350px;
-            transition: top ease-out 0.5s;
+            z-index: 2;
         }
 
         .banner .slider.no2.active {
-            z-index: 1;
-            top: 0px;
+            animation: anim02 0.5s ease-out 0s;
+        }
+
+        @keyframes anim02 {
+            from {
+                top: 350px;
+            }
+
+            to {
+                top: 0px;
+            }
         }
 
         /* 大图片03 */
 
-        .banner .slider.no3 {
-            transform: scale(0.1);
-            transition: transform ease-in 1s;
+        .banner .slider.no3.active {
+            animation: anim03 1s ease-in 0s;
         }
 
-        .banner .slider.no3.active {
-            transform: scale(1);
+        @keyframes anim03 {
+            from {
+                transform: scale(0.1);
+            }
+
+            to {
+                transform: scale(1);
+            }
         }
 
         /* 大图片04 */
 
-        .banner .slider.no4 {
-            transform: scale(2);
-            transition: transform ease-out 1s;
+        .banner .slider.no4.active {
+            animation: anim04 1s ease-out 0s;
         }
 
-        .banner .slider.no4.active {
-            transform: scale(1);
+        @keyframes anim04 {
+            from {
+                transform: scale(2);
+            }
+
+            to {
+                transform: scale(1);
+            }
         }
 
         /* 大图片05 */
-
-        .banner .slider.no5 {
-            transform: scale(0.1) rotateZ(-360deg);
-            transition: transform ease-in-out 0.7s;
+        .banner .slider.no5.active {
+            animation: anim05 0.7s ease-in-out 0s;
         }
 
-        .banner .slider.no5.active {
-            transform: scale(1) rotateZ(0deg);
+        @keyframes anim05 {
+            from {
+                transform: scale(0.1) rotateZ(-360deg);
+            }
+
+            to {
+                transform: scale(1) rotateZ(0deg);
+            }
         }
 
         .pointer {
@@ -148,14 +178,14 @@
     <div class="banner">
         <div class="imgs">
             <img class="slider no1" src="img/no6/banner01.jpg" alt="">
-            <img class="slider no2 active" src="img/no6/banner02.jpg" alt="">
+            <img class="slider no2" src="img/no6/banner02.jpg" alt="">
             <img class="slider no3" src="img/no6/banner03.jpg" alt="">
             <img class="slider no4" src="img/no6/banner04.jpg" alt="">
             <img class="slider no5" src="img/no6/banner05.jpg" alt="">
         </div>
         <ul class="pointer">
             <li>
-                <img src="img/no6/banner01.jpg" alt="">
+                <a href="javascript:;"></a> <img src="img/no6/banner01.jpg" alt="">
             </li>
             <li>
                 <img src="img/no6/banner02.jpg" alt="">
@@ -187,16 +217,14 @@
             if (oldClass.indexOf('active') == -1) {
                 imgs[idx].className = oldClass + ' active';
             }
-            // 去除其他img中的active
-            setTimeout(function () {
-                for (var i = 0; i < imgs.length; i++) {
-                    var cls = imgs[i].className;
-                    if (cls.indexOf('active') !== -1 && (i !== idx)) {
-                        console.log(cls)
-                        imgs[i].className = cls.slice(0, cls.indexOf(' active'));
-                    }
+
+            for (var i = 0; i < imgs.length; i++) {
+                var cls = imgs[i].className;
+                if (cls.indexOf('active') !== -1 && (i !== idx)) {
+                    imgs[i].className = cls.slice(0, cls.indexOf(' active'));
                 }
-            }, 1000)
+            }
+
         })
     </script>
 </body>
