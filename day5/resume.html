@@ -2,15 +2,31 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta id="charset" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <!-- <link rel="stylesheet" href="css/style_1.css"> -->
-    <link rel="stylesheet" href="css/style_3.css">
+    <link rel="stylesheet" id="cssFile" href="css/style_3.css">
+    <style>
+        .option{
+           margin: 10px;
+        }
+        .option button{
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            background: lightskyblue;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="option">
+        <button data-type="1" type="button">样式1</button>
+        <button data-type="2" type="button">样式2</button>
+        <button data-type="3" type="button">样式3</button>
+    </div>
     <main>
         <h2>简历</h2>
         <section class="content">
@@ -63,6 +79,17 @@
             </dl>
         </section>
     </main>
+
+    <script>
+        var button = document.querySelector('.option');
+        button.addEventListener('click', function (e) {
+            var ele = e.target.nodeName.toLowerCase();
+            if (ele === 'button') {
+                var type = e.target.dataset.type;
+                document.querySelector('#cssFile').href = 'css/style_' + type + '.css';
+            }
+        })
+    </script>
 </body>
 
 </html>

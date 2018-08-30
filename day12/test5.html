@@ -14,15 +14,26 @@
 
         #img {
             width: 300px;
-            height: 310px;
+            height: 298px;
             background: url('img/sprite.jpg') 0px -2px no-repeat;
             overflow: hidden;
             background-size: cover;
+        }
+
+        .option {
+            margin-bottom: 10px;
         }
     </style>
 </head>
 
 <body>
+    <div class="option">
+        <a href="index.html">test1</a>
+        <a href="test2.html">test2</a>
+        <a href="test3.html">test3</a>
+        <a href="test4.html">test4</a>
+        <a href="test5.html">test5</a>
+    </div>
     <div class="container">
         <div id="img">
 
@@ -31,7 +42,7 @@
     <script>
         var img = document.getElementById('img');
         img.style.backgroundPositionY = '-2px';
-        setInterval(changePos, 100);
+        setInterval(changePos, 150);
         var back = false;
 
         function changePos() {

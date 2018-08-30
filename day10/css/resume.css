@@ -2,7 +2,6 @@
             v2.0 | 20110126
             License: none (public domain)
         */
-
  html,
  body,
  div,
@@ -78,7 +77,6 @@
  }
 
  /* HTML5 display-role reset for older browsers */
-
  article,
  aside,
  details,
@@ -249,13 +247,18 @@
  }
 
  .main #more {
-     font-size: 14px;
+     font-size: 12px;
      margin-left: 10px;
      cursor: pointer;
+     padding: 1px 6px;
+     border-radius: 3px;
+     border: 1px solid;
  }
 
  .main #more:hover {
-     text-decoration: underline;
+     color: #fff;
+     border: 1px solid #d0806f;
+     background: #d0806f;
  }
 
  .main dl {

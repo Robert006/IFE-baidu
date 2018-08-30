@@ -6,14 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .option {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="option">
+        <a href="index.html">test1</a>
+        <a href="test2.html">test2</a>
+        <a href="test3.html">test3</a>
+        <a href="test4.html">test4</a>
+        <a href="test5.html">test5</a>
+    </div>
+
     <div id="fade-obj" style="width:300px;height:300px;background:#000"></div>
     <button id="fade-btn">淡出</button>
+    <!-- <button id="timeout-btn" data-type="1">setTimeout淡出</button> -->
     <script>
         var btn = document.getElementById('fade-btn');
-        var timer;
+        // var tbtn = document.getElementById('timeout-btn');
+        var timer, stimer;
         btn.onclick = function () {
             btn.disabled = true;
             var text = this.innerHTML;
@@ -47,6 +62,34 @@
                 btn.disabled = false;
                 btn.innerHTML = '淡出';
             }
+        }
+
+        // tbtn.addEventListener('click', function () {
+        //     tbtn.disabled = true;
+        //     toggleFade();
+        // });
+
+        function toggleFade() {
+            var type = tbtn.dataset.type;
+            var opacity;
+            if (type == 1) {
+                document.getElementById('fade-obj').style.opacity = 1;
+                opacity = document.getElementById('fade-obj').style.opacity;
+                while (opacity > 0) {
+                    console.log(opacity)
+                    document.getElementById('fade-obj').style.opacity -= 0.01;
+                    opacity = document.getElementById('fade-obj').style.opacity;
+                }
+                tbtn.disabled = false;
+                tbtn.innerHTML = 'setTimeout淡出';
+            }
+        }
+
+        function interval(fn, time) {
+            var timer;
+            timer = setTimeout(function () {
+                interval(fn, time);
+            }, time)
         }
     </script>
 </body>

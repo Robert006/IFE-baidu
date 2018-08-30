@@ -9,7 +9,8 @@
     <style>
         .wrapper {
             width: 600px;
-            margin: 0 auto;
+            margin: 50px auto;
+            text-align: center;
             position: relative;
         }
 
@@ -26,6 +27,8 @@
             list-style: none;
             position: absolute;
             top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
             margin: 0px;
             padding: 0px;
             width: 298px;
@@ -37,8 +40,12 @@
             height: 32px;
             line-height: 32px;
             font-size: 16px;
-            padding-left: 6px;
+            text-align: left;
+            padding-left: 10px;
             cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             box-sizing: border-box;
         }
 

@@ -17,13 +17,18 @@
             padding: 5px 8px;
             font-size: 14px;
         }
+        .link{
+            margin-left: 20px;
+            color: #333;
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
     <input id="dec-number" type="number" placeholder="输入一个十进制非负整数">
     <input id="bin-bit" type="number" placeholder="输入转化后二进制数字位数">
-    <button id="trans-btn">转化为二进制</button>
+    <button id="trans-btn">转化为二进制</button> <a class="link" href="resume.html">简历</a>
     <p id="result">运算结果</p>
 
     <table border="1">
@@ -77,7 +82,8 @@
                 }
             }
         }
-        // print3()
+        print3()
+
         function multiTable(id) {
             var table = document.getElementById(id);
             var res = '';

@@ -6,9 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .option{
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="option">
+        <a href="index.html">test1</a>
+        <a href="test2.html">test2</a>
+        <a href="test3.html">test3</a>
+        <a href="test4.html">test4</a>
+    </div>
     <input id="queue-input" type="text">
     <p id="queue-cont">队列内容：apple&lt;-pear</p>
     <button id="in-btn" onclick="Queue.enqueue()">入队</button>
@@ -46,6 +57,7 @@
                 this.result(queue);
             },
             printFirst: function () {
+                alert(queue[0])
                 console.log(queue[0])
             },
             isEmpty: function () {
@@ -77,6 +89,7 @@
             },
             peek: function () {
                 console.log(stack[stack.length - 1])
+                alert(stack[stack.length - 1])
                 return stack[stack.length - 1]
             },
             isEmpty: function () {
@@ -180,7 +193,8 @@
                 getListWithDLR(obj.right);
             }
         }
-        // getListWithDLR(tree)
+        console.log('前序遍历')
+        getListWithDLR(tree)
         // 把这个对象中所有的名字以“中序遍历”的方式全部输出到console中
         function getListWithLDR(obj) {
             if (obj) {
@@ -189,7 +203,8 @@
                 getListWithDLR(obj.right);
             }
         }
-        // console.log('')
+        console.log('中序遍历')
+        getListWithLDR(tree)
         // 把这个对象中所有的名字以“后序遍历”的方式全部输出到console中
         function getListWithLRD(obj) {
             if (obj) {
@@ -198,7 +213,8 @@
                 console.log(obj.name);
             }
         }
-        // getListWithLRD(tree)
+        console.log('后序遍历')
+        getListWithLRD(tree)
     </script>
 </body>
 
